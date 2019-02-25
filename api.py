@@ -1,12 +1,26 @@
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from tempmail import TempMail
+# from tempmail import TempMail
+from models import db
+
 
 # ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 
 
+POSTGRES = {
+    'user': 'postgres',
+    'pw': 'password',
+    'db': 'keys',
+    'host': 'localhost',
+    'port': '5000',
+}
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://%(user)s:\
+    %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+db.init_app(app)
+
+"""
 # def allowed_file(file):
 #     return '.' in filename and \
 #            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -45,30 +59,16 @@ def get_tinyjpg(file):
 
 def patch_db():
     pass
-
+"""
 
 @app.route('/', methods=['GET', 'POST', 'PATCH'])
-    img = get_img_from_api()
-    mail = get_mail()
-    tinyjpg = post_tinyjpg()
-    key = patch_db()
-    send_img = send_img_to_api()
-
-
-# def compress_image(file):
-#     """Compress image size via API"""
-
-#     # keep track how many times API have been used
-#     if tinify.key == "ZPF88NBkpcTy9m2Bsz1qRq4ZRMf4H9WP":
-#         db.execute("UPDATE api_count SET count1 = count1 + 1")
-#     else:
-#         db.execute("UPDATE api_count SET count2 = count2 + 1")
-
-#     counter = db.execute("SELECT * FROM api_count")[0]
-
-#     # don't compress image if API request limit is reached
-#     if counter["count1"] == 495 or counter["count2"] == 495:
-#         return "Limit reached"
+def main():
+    return 'Hello, world!'
+        # img = get_img_from_api()
+        # mail = get_mail()
+        # tinyjpg = post_tinyjpg()
+        # key = patch_db()
+        # send_img = send_img_to_api()
 
 
 if __name__ == '__main__':
