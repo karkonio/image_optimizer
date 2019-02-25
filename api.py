@@ -25,8 +25,6 @@ def get_img_from_api(file):
                 # filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-
-
 def get_mail(key):
     tm = TempMail()
     email = tm.get_email_address()  # v5gwnrnk7f@gnail.pw  создаем почту
@@ -57,13 +55,6 @@ def patch_db():
     send_img = send_img_to_api()
 
 
-
-
-
-
-
-
-
 # def compress_image(file):
 #     """Compress image size via API"""
 
@@ -80,14 +71,5 @@ def patch_db():
 #         return "Limit reached"
 
 
-
-
-
-
-
-
-
-
-
-    if __name__ == '__main__':
-        app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
