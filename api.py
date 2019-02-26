@@ -3,7 +3,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     'postgresql://postgres:password@localhost:5432/api'
@@ -21,33 +20,10 @@ class api_keys(db.Model):
         self.counter = counter
 
 
-# def allowed_file(file):
-#     return '.' in filename and \
-#            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-# def get_img_from_api(file):
-#     if request.method == 'GET':
-#             # check if the post request has the file part
-#             if 'file' not in request.files:
-#                 flash('No file part')
-#                 return redirect(request.url)
-#             else:
-#                 uploaded_file = request.files['file']
-#                 # if uploaded_file:
-#                 # return '.' in filename and \
-#                 # filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-# def get_mail(key):
-#     tm = TempMail()
-#     email = tm.get_email_address()  # v5gwnrnk7f@gnail.pw  создаем почту
-#     key = tm.get_mailbox(email)  # list of emails получаем письма из почты
-
-
-def post_tinyjpg(file, key, db, api_keys):
-    access_key = api_keys.query.filter_by(counter != 500).first()
+def post_tinyjpg(db):
+    access_key = api_keys.query.filter(api_keys.counter != 500).first()
     tinify.key = access_key.key
+    print(access_key.key)
     # source = tinify.from_file(uploaded_file)
     access_key.counter = access_key.counter + 1
     db.session.commit()
@@ -55,17 +31,10 @@ def post_tinyjpg(file, key, db, api_keys):
     # compressions_this_month = tinify.compression_count
 
 
-# def get_tinyjpg(file):
-#     pass
-
-
-# def patch_db():
-#     pass
-
-
 @app.route('/', methods=['GET', 'POST', 'PATCH'])
 def main():
-    return 'Hello, world!'
+    post_tinyjpg(db)
+    return 'Hello, World!'
 
 
 if __name__ == '__main__':
