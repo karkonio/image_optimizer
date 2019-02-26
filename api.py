@@ -1,5 +1,7 @@
+import tinify
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+
 
 
 app = Flask(__name__)
@@ -43,12 +45,14 @@ class api_keys(db.Model):
 #     key = tm.get_mailbox(email)  # list of emails получаем письма из почты
 
 
-# def post_tinyjpg(file, key):
-#     tinify.key = "YOUR_API_KEY"
-#     source = tinify.from_file(uploaded_file)
-#     source.to_file(uploaded_file)
-#     # compressions_this_month = tinify.compression_count
-#     return
+def post_tinyjpg(file, key, db, api_keys):
+    access_key = api_keys.query.filter_by(counter != 500).first()
+    tinify.key = access_key.key
+    # source = tinify.from_file(uploaded_file)
+    access_key.counter = access_key.counter + 1
+    db.session.commit()
+    # source.to_file(uploaded_file)
+    # compressions_this_month = tinify.compression_count
 
 
 # def get_tinyjpg(file):
