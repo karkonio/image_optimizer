@@ -20,6 +20,15 @@ class api_keys(db.Model):
         self.counter = counter
 
 
+def get_mail():
+    # tm = TempMail()
+    # email = tm.get_email_address()
+    # print(email)
+    # posts = tm.get_mailbox(email)
+    # print(posts)
+    pass
+
+
 def post_tinyjpg(db):
     access_key = api_keys.query.filter(api_keys.counter != 500).first()
     tinify.key = access_key.key
@@ -34,6 +43,7 @@ def post_tinyjpg(db):
 @app.route('/', methods=['GET', 'POST', 'PATCH'])
 def main():
     post_tinyjpg(db)
+    get_mail()
     return 'Hello, World!'
 
 
