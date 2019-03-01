@@ -24,7 +24,8 @@ def allowed_file(filename):
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
-        return file
+        if file and allowed_file(file.filename):
+            return file
     return 'Hello'
 
 
@@ -47,9 +48,14 @@ def root():
         except Exception:
             pass
     else:
-        img = upload_file()
-        img_small = post_tinyjpg(img)
-        return send_file(img_small, attachment_filename=img_small.filename)
+        try:
+            img = upload_file()
+            img_small = post_tinyjpg(img)
+            return send_file(img_small, attachment_filename=img_small.filename)
+        except Exception:
+            return Response('Picture format is not correct',
+                            status=422,
+                            mimetype='application /json')
 
 
 if __name__ == '__main__':
