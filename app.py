@@ -1,5 +1,5 @@
 
-from flask import Flask, session, request, flash, send_file
+from flask import Flask, session, request, send_file, Response
 import tinify
 import io
 
@@ -23,34 +23,33 @@ def allowed_file(filename):
 
 def upload_file():
     if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('No file part')
-            return request.url
         file = request.files['file']
-        print(file)
-        if file.filename == '':
-            flash('No selected file')
-            return
         return file
-    return 'hello'
+    return 'Hello'
 
 
 def post_tinyjpg(source):
-    tinify.key = "0q9Nds6Tc7hR4JyVJSV66dBM6KWPzpgg"
-    print(1)
+    tinify.key = "qw0KN22581F0k15PbYRyr8jpGzdf20w9"
     source_data = source.read()
-    print(source_data)
     result_data = tinify.from_buffer(source_data).to_buffer()
     response = io.BytesIO(result_data)
-    print(3)
+    response.filename = source.filename
     return response
 
 
 @app.route('/upload', methods=['POST', 'GET'])
 def root():
-    img = upload_file()
-    img_small = post_tinyjpg(img)
-    return send_file(img_small, 'image/jpeg')
+    if 'file' not in request.files:
+        try:
+            return Response('No file part',
+                            status=422,
+                            mimetype='application /json')
+        except Exception:
+            pass
+    else:
+        img = upload_file()
+        img_small = post_tinyjpg(img)
+        return send_file(img_small, attachment_filename=img_small.filename)
 
 
 if __name__ == '__main__':
