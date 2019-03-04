@@ -1,63 +1,41 @@
-
-from flask import Flask, session, request, send_file, Response
-import tinify
-import io
-
-
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-
-app = Flask(__name__)
-app.secret_key = 'secret key'
+from requests_html import HTMLSession
+from selenium import webdriver
+import time
+import names
 
 
-@app.route('/index', methods=['GET', 'POST'])
-def index():
-    name = session.get('name')
-    return name
+url_1 = 'https://temp-mail.org/ru/'
+url_2 = 'https://tinypng.com/developers'
+el_1 = 'input[name="fullName"]'
+el_2 = 'input[name="mail"]'
+el_3 = 'input[type=submit]'
+el_4 = 'API'
+el_5 = '/html/body/div[1]/div/div/div[2]/div[1]/div[1]/div[3]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td[2]/p[3]/a'
+el_6 = 'mail'
+el_7 = 'value'
+driver = webdriver.Chrome('/home/kumir/environments/temp_tiny/chromedriver')
+session = HTMLSession()
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+def tiny_registration():
+    user_name = names.get_first_name()
+    email = driver.find_element_by_id(el_6).get_attribute(el_7)
+    driver.get(url_2)
+    driver.find_element_by_css_selector(el_1).send_keys(user_name)
+    driver.find_element_by_css_selector(el_2).send_keys(email)
+    driver.find_element_by_css_selector(el_3).click()
 
 
-def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            return file
-    return 'Hello'
-
-
-def post_tinyjpg(source):
-    tinify.key = "qw0KN22581F0k15PbYRyr8jpGzdf20w9"
-    source_data = source.read()
-    result_data = tinify.from_buffer(source_data).to_buffer()
-    response = io.BytesIO(result_data)
-    response.filename = source.filename
-    return response
-
-
-@app.route('/upload', methods=['POST', 'GET'])
-def root():
-    if 'file' not in request.files:
-        try:
-            return Response('No file part',
-                            status=422,
-                            mimetype='application /json')
-        except Exception:
-            pass
-    else:
-        try:
-            img = upload_file()
-            img_small = post_tinyjpg(img)
-            return send_file(img_small, attachment_filename=img_small.filename)
-        except Exception:
-            return Response('Picture format is not correct',
-                            status=422,
-                            mimetype='application /json')
+def get_api_from_mail():
+    driver.get(url_1)
+    tiny_registration()
+    driver.get(url_1)
+    time.sleep(15)
+    driver.find_element_by_partial_link_text(el_4).click()
+    time.sleep(5)
+    button = driver.find_elements_by_xpath(el_5)
+    button[0].click()
 
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run()
+    get_api_from_mail()
