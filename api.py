@@ -1,6 +1,7 @@
 import tinify
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from api_key import confirmation
 
 
 app = Flask(__name__)
@@ -20,6 +21,10 @@ class api_keys(db.Model):
         self.counter = counter
 
 
+def get_mail():
+    api()
+
+
 def post_tinyjpg(db):
     access_key = api_keys.query.filter(api_keys.counter != 500).first()
     tinify.key = access_key.key
@@ -34,6 +39,7 @@ def post_tinyjpg(db):
 @app.route('/', methods=['GET', 'POST', 'PATCH'])
 def main():
     post_tinyjpg(db)
+    get_mail()
     return 'Hello, World!'
 
 
