@@ -42,8 +42,6 @@ def post_tinyjpg(db):
 
 @app.route('/', methods=['GET', 'POST', 'PATCH'])
 def main():
-    # post_tinyjpg(db)
-    new_api_key(db)
     return 'Hello, World!'
 
 
