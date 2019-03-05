@@ -1,11 +1,11 @@
 from selenium import webdriver
 import time
 import names
-# from bs4 import BeautifulSoup
-# import requests
+from selenium.webdriver.chrome.options import Options
 
-
-driver = webdriver.Chrome('/home/korka/Roborin/image_optimizer/chromedriver')
+options = Options()
+options.headless = True
+driver = webdriver.Chrome('/home/korka/Roborin/image_optimizer/chromedriver', chrome_options=options)
 
 
 def get_email(url1):
@@ -15,7 +15,6 @@ def get_email(url1):
     return email
 
 
-# headless
 def api():
     email = get_email('https://tempail.com/ru/')
     key_is_here = confirmation(email)
