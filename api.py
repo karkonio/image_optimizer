@@ -1,6 +1,7 @@
 import tinify
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from api_key import confirmation
 
 
 app = Flask(__name__)
@@ -21,12 +22,7 @@ class api_keys(db.Model):
 
 
 def get_mail():
-    # tm = TempMail()
-    # email = tm.get_email_address()
-    # print(email)
-    # posts = tm.get_mailbox(email)
-    # print(posts)
-    pass
+    api()
 
 
 def post_tinyjpg(db):
