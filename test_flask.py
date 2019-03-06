@@ -17,15 +17,16 @@ def test_allowed_file():
 
 
 def test_upload_file(client):
-    with open('gory.jpeg', 'rb') as f:
-        filename = f.name
-        print(filename)
-        filename = allowed_file(filename)
-        post_return = client.post(
-            path='/upload', data={'file': f}
-        )
-        print(post_return)
-        assert post_return.status_code == 200
+    if request.method == 'POST':
+        with open('gory.jpeg', 'rb') as f:
+            filename = f.name
+            print(filename)
+            filename = allowed_file(filename)
+            post_return = client.post(
+                path='/upload', data={'file': f}
+            )
+            print(post_return)
+            assert post_return.status_code == 200
 
 
 def test_root(client):
