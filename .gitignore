@@ -1,2 +1,10 @@
+<<<<<<< HEAD
+.coverage
+__pycache__/test_flask.cpython-36-PYTEST.pyc
+file.txt
+gory.jpeg
+test.png
+=======
 migrations
 __pycache__
+>>>>>>> efa2eb2329a191b33a84dd86c719c7b5efa8bd36

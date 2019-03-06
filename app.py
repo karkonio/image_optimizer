@@ -1,3 +1,4 @@
+from flask import Flask, request, send_file, Response
 import tinify
 from flask import Flask, session, request, send_file, Response
 from flask_sqlalchemy import SQLAlchemy
@@ -27,12 +28,13 @@ class api_keys(db.Model):
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
+        print(request.files)
         if file and allowed_file(file.filename):
             return file
     return 'Hello'
