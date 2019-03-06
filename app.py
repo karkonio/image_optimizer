@@ -82,7 +82,7 @@ def root():
     else:
         try:
             img = upload_file()
-            img_small = post_tinyjpg(img)
+            img_small = post_tinyjpg(img, db)
             return send_file(img_small, attachment_filename=img_small.filename)
         except Exception:
             return Response('Picture format is not correct',
