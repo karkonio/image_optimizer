@@ -1,24 +1,31 @@
+<<<<<<< HEAD:requirements.txt
 alembic==1.0.7
 aniso8601==4.1.0
 appdirs==1.4.3
 beautifulsoup4==4.7.1
 bs4==0.0.1
+=======
+>>>>>>> master:reqirements.txt
 certifi==2018.11.29
 chardet==3.0.4
 Click==7.0
 cssselect==1.0.3
 fake-useragent==0.1.11
 Flask==1.0.2
+<<<<<<< HEAD:requirements.txt
 Flask-Migrate==2.4.0
 Flask-RESTful==0.3.7
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.3.2
+=======
+>>>>>>> master:reqirements.txt
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10
 lxml==4.3.1
 Mako==1.0.7
 MarkupSafe==1.1.1
+<<<<<<< HEAD:requirements.txt
 names==0.3.0
 numpy==1.16.2
 parse==1.11.1
@@ -36,6 +43,10 @@ selenium==3.141.0
 six==1.12.0
 soupsieve==1.8
 SQLAlchemy==1.2.18
+=======
+Pillow==5.4.1
+requests==2.21.0
+>>>>>>> master:reqirements.txt
 tinify==1.5.1
 tqdm==4.31.1
 urllib3==1.24.1
