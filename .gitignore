@@ -1,0 +1,5 @@
+.coverage
+__pycache__/test_flask.cpython-36-PYTEST.pyc
+file.txt
+gory.jpeg
+test.png

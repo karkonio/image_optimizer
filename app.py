@@ -1,29 +1,24 @@
 
-from flask import Flask, session, request, send_file, Response
+from flask import Flask, request, send_file, Response
 import tinify
 import io
 
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+ALLOWED_EXTENSIONS = set(['png', 'jpeg'])
 
 app = Flask(__name__)
 app.secret_key = 'secret key'
 
 
-@app.route('/index', methods=['GET', 'POST'])
-def index():
-    name = session.get('name')
-    return name
-
-
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
+        print(request.files)
         if file and allowed_file(file.filename):
             return file
     return 'Hello'
