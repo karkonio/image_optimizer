@@ -26,15 +26,18 @@ def new_api_key(db):
     new_key = api_keys(key=key, counter=0)
     db.session.add(new_key)
     db.session.commit()
-    return key
 
 
 def post_tinyjpg(db):
-    access_key = api_keys.query.filter(api_keys.counter != 500).first()
-    tinify.key = access_key.key
-    print(access_key.key)
+    try:
+        get_key = api_keys.query.filter(api_keys.counter < 500).first()
+        tinify.key = get_key.key
+    except:
+        new_api_key(db)
+        get_key = api_keys.query.filter(api_keys.counter == 0).first()
+        tinify.key = get_key.key
     # source = tinify.from_file(uploaded_file)
-    access_key.counter = access_key.counter + 1
+    get_key.counter = get_key.counter + 1
     db.session.commit()
     # source.to_file(uploaded_file)
     # compressions_this_month = tinify.compression_count
@@ -42,6 +45,7 @@ def post_tinyjpg(db):
 
 @app.route('/', methods=['GET', 'POST', 'PATCH'])
 def main():
+    post_tinyjpg(db)
     return 'Hello, World!'
 
 
