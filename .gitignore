@@ -1,0 +1,4 @@
+.coverage
+__pycache__/test_flask.cpython-36-PYTEST.pyc
+migrations
+__pycache__
