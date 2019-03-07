@@ -1,6 +1,5 @@
-from flask import Flask, request, send_file, Response
+from flask import Flask, request, send_file, Response, session
 import tinify
-from flask import Flask, session, request, send_file, Response
 from flask_sqlalchemy import SQLAlchemy
 import io
 from api_key import api
@@ -26,6 +25,9 @@ class api_keys(db.Model):
         self.counter = counter
 
 
+# db.create_all()
+
+
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -44,7 +46,7 @@ def post_tinyjpg(source, db):
     try:
         get_key = api_keys.query.filter(api_keys.counter < 500).first()
         tinify.key = get_key.key
-    except:
+    except Exception:
         new_api_key(db)
         get_key = api_keys.query.filter(api_keys.counter == 0).first()
         tinify.key = get_key.key

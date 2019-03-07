@@ -29,7 +29,7 @@ def api():
                  > main:nth-child(1) > section > div > table > tbody \
                  > tr.requested > td.key > span')
             find_key = True
-        except:
+        except Exception:
             sleep(1)
     return key.text
 
@@ -47,8 +47,8 @@ def confirmation(email):
             elems = driver.find_elements_by_xpath("//a[@href]")
             key_is_here = elems[1].get_attribute('href')
             find_message = True
-        except:
-            sleep(5)
+        except Exception:
+            sleep(1)
     return key_is_here
 
 
