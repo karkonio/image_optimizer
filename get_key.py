@@ -1,7 +1,7 @@
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
-from time import sleep
-from names import get_first_name
+import time
+import names
 from os import getcwd
 
 
@@ -11,15 +11,15 @@ path = getcwd() + '/chromedriver'
 driver = webdriver.Chrome(path, chrome_options=options)
 
 
-def get_email(url1):
-    driver.get(url1)
-    email = driver.find_element_by_css_selector('input[id="eposta_adres"]').\
-        get_attribute('data-clipboard-text')
+def get_email(url):
+    driver.get(url)
+    email = driver.find_element_by_css_selector('input[id="mail"]').\
+        get_attribute('value')
     return email
 
 
 def api():
-    email = get_email('https://tempail.com/ru/')
+    email = get_email('https://temp-mail.org/')
     key_url = confirmation(email)
     driver.get(key_url)
     find_key = False
@@ -30,30 +30,31 @@ def api():
                  > tr.requested > td.key > span')
             find_key = True
         except Exception:
-            sleep(1)
+            time.sleep(0.5)
     return key.text
 
 
 def confirmation(email):
     registration(email)
-    driver.get('https://tempail.com/ru/')
+    driver.get('https://temp-mail.org/')
+    print(email)
     find_message = False
     while find_message is False:
         try:
-            driver.find_element_by_partial_link_text('API').click()
-            driver.switch_to.frame(
-                driver.find_element_by_id("iframe")
-            )
-            elems = driver.find_elements_by_xpath("//a[@href]")
-            key_is_here = elems[1].get_attribute('href')
+            driver.find_element_by_css_selector('a.title-subject').click()
             find_message = True
         except Exception:
-            sleep(1)
+            time.sleep(0.5)
+    time.sleep(0.5)
+    elem = driver.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div[1]/\
+        div[1]/div[3]/div/div/table/tbody/tr/td/table/\
+        tbody/tr[3]/td[2]/p[3]/a')
+    key_is_here = elem.get_attribute('href')
     return key_is_here
 
 
 def registration(email):
-    random_name = get_first_name()
+    random_name = names.get_first_name()
     driver.get('https://tinypng.com/developers')
     driver.find_element_by_css_selector('input[name="fullName"]').\
         send_keys(random_name)
@@ -63,3 +64,4 @@ def registration(email):
 
 if __name__ == '__main__':
     api()
+    # get_api_from_mail()
