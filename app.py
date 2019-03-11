@@ -2,7 +2,6 @@ from flask import Flask, request, send_file, Response, session
 from flask_sqlalchemy import SQLAlchemy
 from get_key import api
 import tinify
-import time
 import io
 
 
@@ -13,15 +12,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 db = SQLAlchemy(app)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-
-
-def time_of_function(function):
-    def wrapped(*args):
-        start_time = time.clock()
-        res = function(*args)
-        print(function.__name__ + str(time.clock() - start_time))
-        return res
-    return wrapped
 
 
 class api_keys(db.Model):
@@ -51,7 +41,6 @@ def upload_file():
     return 'Hello'
 
 
-@time_of_function
 def post_tinyjpg(source, db):
     try:
         get_key = api_keys.query.filter(api_keys.counter < 500).first()
@@ -90,15 +79,9 @@ def root():
                         mimetype='application /json')
     else:
         try:
-            sstart_time = time.clock()
             img = upload_file()
-            print('post1' + str(time.clock() - sstart_time))
-            start_time = time.clock()
             img_small = post_tinyjpg(img, db)
-            print('post' + str(time.clock() - start_time))
-            start_time1 = time.clock()
             return send_file(img_small, attachment_filename=img_small.filename)
-            print('root' + str(time.clock() - start_time1))
         except Exception:
             return Response('Picture format is not correct',
                             status=422,

@@ -37,7 +37,6 @@ def api():
 def confirmation(email):
     registration(email)
     driver.get('https://temp-mail.org/')
-    print(email)
     find_message = False
     while find_message is False:
         try:
