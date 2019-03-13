@@ -64,10 +64,9 @@ def new_api_key(db):
     db.session.commit()
 
 
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    name = session.get('name')
-    return name
+    return 'Hello'
 
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -91,4 +90,4 @@ def root():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1')
