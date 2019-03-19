@@ -3,10 +3,13 @@ import tinify
 from flask_sqlalchemy import SQLAlchemy
 import io
 from api_key import api
+from flask import make_response
+import logging
 
 
 app = Flask(__name__)
 app.secret_key = 'secret key'
+app.logger.setLevel(logging.DEBUG)
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     'postgresql://postgres:password@localhost:5432/api'
 db = SQLAlchemy(app)
@@ -36,7 +39,6 @@ def allowed_file(filename):
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
-        print(request.files)
         if file and allowed_file(file.filename):
             return file
     return 'Hello'
@@ -85,11 +87,10 @@ def root():
         try:
             img = upload_file()
             img_small = post_tinyjpg(img, db)
+            app.logger.info('Nice try')
             return send_file(img_small, attachment_filename=img_small.filename)
-        except Exception:
-            return Response('Picture format is not correct',
-                            status=422,
-                            mimetype='application /json')
+        except Exception as e:
+                    logging.error(e, exc_info=True)
 
 
 if __name__ == '__main__':

@@ -31,6 +31,7 @@ def api():
             find_key = True
         except Exception:
             sleep(1)
+    print(key.text)
     return key.text
 
 
