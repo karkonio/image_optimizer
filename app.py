@@ -1,8 +1,9 @@
 from flask import Flask, request, send_file, Response, session
-import tinify
 from flask_sqlalchemy import SQLAlchemy
+from get_key import api
+import tinify
 import io
-from api_key import api
+from get_key import api
 from flask import make_response
 import logging
 
@@ -77,12 +78,9 @@ def index():
 @app.route('/upload', methods=['POST', 'GET'])
 def root():
     if 'file' not in request.files:
-        try:
-            return Response('No file part',
-                            status=422,
-                            mimetype='application /json')
-        except Exception:
-            pass
+        return Response('No file part',
+                        status=422,
+                        mimetype='application /json')
     else:
         try:
             img = upload_file()
