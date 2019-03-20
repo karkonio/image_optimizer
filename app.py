@@ -1,11 +1,9 @@
 from flask import Flask, request, send_file, Response, session
 from flask_sqlalchemy import SQLAlchemy
 from get_key import api
+import logging
 import tinify
 import io
-from get_key import api
-from flask import make_response
-import logging
 
 
 app = Flask(__name__)
@@ -29,9 +27,6 @@ class api_keys(db.Model):
         self.counter = counter
 
 
-# db.create_all()
-
-
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -42,7 +37,6 @@ def upload_file():
         file = request.files['file']
         if file and allowed_file(file.filename):
             return file
-    return 'Hello'
 
 
 def post_tinyjpg(source, db):
@@ -67,12 +61,7 @@ def new_api_key(db):
     new_key = api_keys(key=key, counter=0)
     db.session.add(new_key)
     db.session.commit()
-
-
-@app.route('/index', methods=['GET', 'POST'])
-def index():
-    name = session.get('name')
-    return name
+    return key
 
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -85,10 +74,12 @@ def root():
         try:
             img = upload_file()
             img_small = post_tinyjpg(img, db)
-            app.logger.info('Nice try')
             return send_file(img_small, attachment_filename=img_small.filename)
         except Exception as e:
-                    logging.error(e, exc_info=True)
+            logging.error(e, exc_info=True)
+            return Response('Picture format is not correct',
+                            status=422,
+                            mimetype='application /json')
 
 
 if __name__ == '__main__':
