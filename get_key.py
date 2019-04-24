@@ -1,14 +1,19 @@
-from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 import time
 from names import get_first_name
 from os import getcwd
 
 
-options = Options()
-options.headless = True
+options = webdriver.ChromeOptions()
+options.binary_location = '/usr/bin/google-chrome-stable'
+options.add_argument('--headless')
+options.add_argument('--start-maximized')
+options.add_argument('disable-infobars')
+options.add_argument('--disable-extensions')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
 path = getcwd() + '/chromedriver'
-driver = webdriver.Chrome(path, chrome_options=options)
+driver = webdriver.Chrome(chrome_options=options, executable_path=path)
 
 
 def get_email(url1):
@@ -31,7 +36,9 @@ def api():
             find_key = True
         except Exception:
             time.sleep(1)
+    print(key.text)
     return key.text
+    driver.close()
 
 
 def confirmation(email):
