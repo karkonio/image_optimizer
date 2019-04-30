@@ -1,9 +1,10 @@
-from flask import Flask, request, send_file, Response, session
+from flask import Flask, request, send_file, Response
 from flask_sqlalchemy import SQLAlchemy
 from get_key import api
 import logging
 import tinify
 import io
+import subprocess
 
 
 app = Flask(__name__)
@@ -25,6 +26,7 @@ class api_keys(db.Model):
     def __init__(self, key, counter):
         self.key = key
         self.counter = counter
+# db.create_all()
 
 
 def allowed_file(filename):
@@ -74,6 +76,12 @@ def root():
         try:
             img = upload_file()
             img_small = post_tinyjpg(img, db)
+            subprocess.Popen(
+                'killall chromedriver', shell=True
+            )
+            subprocess.Popen(
+                'killall chrome', shell=True
+            )
             return send_file(img_small, attachment_filename=img_small.filename)
         except Exception as e:
             logging.error(e, exc_info=True)
